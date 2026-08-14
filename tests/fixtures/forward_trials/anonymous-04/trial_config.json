@@ -1,0 +1,8 @@
+{
+  "schema_version": 1,
+  "min_chars": 12,
+  "max_candidates": 300,
+  "max_anchors": 20,
+  "near_scan_scope": "boundary",
+  "near_boundary_chars": 320
+}

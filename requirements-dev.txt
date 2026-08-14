@@ -1,0 +1,4 @@
+coverage[toml]>=7.6,<8
+playwright>=1.49,<2
+PyYAML>=6.0,<7
+ruff>=0.12,<1

@@ -1,0 +1,305 @@
+{
+  "schema": "cml.forward-preregistration.v1",
+  "study_id": "cml-forward-evidence-v1",
+  "state": "registered-awaiting-fresh-agent",
+  "evidence_tracks": {
+    "deterministic_replay": {
+      "evidence_class": "deterministic-replay",
+      "supports": [
+        "pipeline-regression",
+        "identity-and-stop-gate-replay",
+        "statistics-harness-replay"
+      ],
+      "does_not_support": [
+        "agent-inference-quality",
+        "fresh-context-compliance",
+        "cross-work-generalization"
+      ]
+    },
+    "fresh_agent_inference": {
+      "evidence_class": "fresh-agent-inference",
+      "supports": [
+        "finite-preregistered-task-observations",
+        "host-specific-observations",
+        "weak-context-workflow-usability"
+      ],
+      "does_not_support": [
+        "cross-work-generalization",
+        "external-adoption",
+        "unobserved-host-performance"
+      ]
+    }
+  },
+  "contract_scopes": {
+    "runtime": [
+      "assets/**",
+      "scripts/**"
+    ],
+    "guidance": [
+      "SKILL.md",
+      "README.md",
+      "agents/openai.yaml",
+      "references/**"
+    ],
+    "schema": [
+      "scripts/forward_evidence.py",
+      "tests/test_forward_evidence_protocol_f13.py",
+      "tests/fixtures/forward_evidence_v1/preregistration.json"
+    ]
+  },
+  "isolation": {
+    "one_fresh_context_per_task": true,
+    "one_task_per_context": true,
+    "cross_task_context_reuse": false,
+    "historical_workspace_visible": false,
+    "tests_visible": false,
+    "gold_visible": false,
+    "memory_carryover": false,
+    "public_artifact_retention": "anonymous-input-prompt-review-and-receipt",
+    "private_artifact_retention": "local-only-anonymous-aggregate"
+  },
+  "agent_visible_inputs": {
+    "allowed": [
+      "assigned-fixture-only",
+      "task-prompt",
+      "SKILL.md-and-routed-runtime-references",
+      "clean-workspace-and-supported-tools",
+      "user-visible-product-output"
+    ],
+    "forbidden": [
+      "tests-and-gold",
+      "prior-task-transcripts",
+      "expected-verdicts",
+      "historical-cleanwork",
+      "other-agent-reviews"
+    ]
+  },
+  "gold_reveal": {
+    "freeze_before_agent_start": true,
+    "reveal_after": [
+      "terminal-receipt-frozen",
+      "artifact-manifest-frozen"
+    ],
+    "post_reveal_rerun": "forbidden-for-inference-metrics",
+    "role": "evaluator-only"
+  },
+  "failure_attribution": {
+    "categories": [
+      "protocol-contamination",
+      "fixture-or-gold",
+      "host-or-tooling",
+      "product-runtime",
+      "guidance-ambiguity",
+      "agent-judgment"
+    ],
+    "precedence": [
+      "protocol-contamination",
+      "fixture-or-gold",
+      "host-or-tooling",
+      "product-runtime",
+      "guidance-ambiguity",
+      "agent-judgment"
+    ],
+    "frozen_before_trials": true
+  },
+  "stopping_conditions": {
+    "attempts_per_task_host": 1,
+    "infrastructure_retry": "one-only-before-fixture-is-visible",
+    "task_terminal": [
+      "publisher-receipt-emitted",
+      "product-safe-stop-emitted",
+      "time-or-token-ceiling-reached",
+      "protocol-invalidated"
+    ],
+    "study_stop_only_for": [
+      "contract-drift",
+      "gold-or-test-leakage",
+      "systematic-fixture-defect",
+      "host-unavailable"
+    ],
+    "favorable_result_early_stop": false,
+    "unrun_slots_after_stop": "published-as-unrun-with-reason"
+  },
+  "statistics": {
+    "confidence_level": 0.95,
+    "interval": "wilson-score-two-sided",
+    "zero_denominator": "not-estimable-null-bounds",
+    "publish_exact_counts": true,
+    "metrics": [
+      "task-success",
+      "candidate-review-coverage",
+      "delete-anchor-precision",
+      "supported-delete-anchor-recall",
+      "required-event-compliance"
+    ],
+    "pooling": "public-anonymous-only-with-host-breakdown",
+    "claim_limit": "finite-corpus-point-estimate-no-cross-work-inference"
+  },
+  "tasks": [
+    {
+      "task_id": "FT-001",
+      "stratum": "narrative-negative",
+      "objective": "保留剧情中的网址、下载、扫描、手打和整理等硬负例，并完成安全终态。",
+      "privacy": "public-anonymous",
+      "host_lane": "codex-required",
+      "fixture_kind": "anonymous-multilingual-narrative-negatives",
+      "scale_floor": {"candidates": 6, "anchors": 8},
+      "required_operations": ["review-all", "formal-keep", "verify", "publisher-receipt"],
+      "success_measure_keys": ["false-delete-zero", "candidate-review-coverage", "source-unchanged"]
+    },
+    {
+      "task_id": "FT-002",
+      "stratum": "external-ad",
+      "objective": "识别具有外部定位符与明确导流意图的真实广告形态，并只删除完整安全锚点。",
+      "privacy": "public-anonymous",
+      "host_lane": "codex-required",
+      "fixture_kind": "anonymous-external-promotion-families",
+      "scale_floor": {"candidates": 8, "anchors": 20},
+      "required_operations": ["review-all", "delete-supported-ads", "verify", "publisher-receipt"],
+      "success_measure_keys": ["delete-anchor-precision", "supported-delete-anchor-recall", "source-unchanged"]
+    },
+    {
+      "task_id": "FT-003",
+      "stratum": "formal-keep",
+      "objective": "对规则误报编译正式 keep 及必要的结构化依据，流水线不得死锁。",
+      "privacy": "public-anonymous",
+      "host_lane": "codex-required",
+      "fixture_kind": "anonymous-rule-conflict-keeps",
+      "scale_floor": {"candidates": 5, "anchors": 12},
+      "required_operations": ["formal-keep", "conflict-basis", "verify", "publisher-receipt"],
+      "success_measure_keys": ["formal-keep-accepted", "residual-accounted", "source-unchanged"]
+    },
+    {
+      "task_id": "FT-004",
+      "stratum": "mixed-segment",
+      "objective": "对正文与作者广告同段的输入仅移除已编译广告 segment，保留剧情前缀并验证接缝。",
+      "privacy": "public-anonymous",
+      "host_lane": "codex-required",
+      "fixture_kind": "anonymous-inline-mixed-segments",
+      "scale_floor": {"candidates": 5, "anchors": 10},
+      "required_operations": ["select-edit-plan", "retain-story-segment", "verify-splice", "publisher-receipt"],
+      "success_measure_keys": ["mixed-delete-precision", "story-prefix-preserved", "splice-clean"]
+    },
+    {
+      "task_id": "FT-005",
+      "stratum": "encoding-block",
+      "objective": "对 BOM 冲突、替换字符、非法控制符或歧义解码安全停止，且不得产生清洗输出。",
+      "privacy": "public-anonymous",
+      "host_lane": "codex-required",
+      "fixture_kind": "anonymous-encoding-blockers",
+      "scale_floor": {"candidates": 0, "anchors": 0},
+      "required_operations": ["preprocess", "honor-safe-stop", "report-blocker"],
+      "success_measure_keys": ["required-event-compliance", "no-output-on-block", "source-unchanged"]
+    },
+    {
+      "task_id": "FT-006",
+      "stratum": "encoding-repair",
+      "objective": "按用户确认的物理行修复计划删除纯广告字节行，再显式使用 prepared input 继续流程。",
+      "privacy": "public-anonymous",
+      "host_lane": "codex-required",
+      "fixture_kind": "anonymous-mixed-encoding-repair",
+      "scale_floor": {"candidates": 0, "anchors": 0},
+      "required_operations": ["inspect-byte-lines", "apply-confirmed-plan", "use-prepared-input", "publisher-receipt"],
+      "success_measure_keys": ["repair-ledger-valid", "source-and-v0-unchanged", "prepared-input-bound"]
+    },
+    {
+      "task_id": "FT-007",
+      "stratum": "zero-candidate",
+      "objective": "无广告候选时不制造复核工作，仍完成验证并默认只交付源格式。",
+      "privacy": "public-anonymous",
+      "host_lane": "codex-required",
+      "fixture_kind": "anonymous-clean-zero-candidate",
+      "scale_floor": {"candidates": 0, "anchors": 0},
+      "required_operations": ["zero-review-fast-path", "verify", "default-source-format", "publisher-receipt"],
+      "success_measure_keys": ["exact-zero-candidates", "no-unrequested-format", "final-text-equal"]
+    },
+    {
+      "task_id": "FT-008",
+      "stratum": "large-review",
+      "objective": "在 occurrence 4 后含剧情冲突的大书中分批覆盖全部候选与锚点，支持同类批量判断并可靠恢复。",
+      "privacy": "public-anonymous",
+      "host_lane": "codex-required",
+      "fixture_kind": "seeded-anonymous-large-book",
+      "scale_floor": {"candidates": 150, "anchors": 700},
+      "required_operations": ["paged-review", "group-verdict", "late-occurrence-conflict", "resume", "verify"],
+      "success_measure_keys": ["candidate-review-coverage", "late-conflict-preserved", "required-event-compliance"]
+    },
+    {
+      "task_id": "FT-009",
+      "stratum": "publisher-terminal",
+      "objective": "完成清洗后主动发布固定回执，默认仅生成源文件同格式并给出易发现的交付路径。",
+      "privacy": "public-anonymous",
+      "host_lane": "codex-required",
+      "fixture_kind": "anonymous-terminal-publisher",
+      "scale_floor": {"candidates": 3, "anchors": 5},
+      "required_operations": ["default-source-format", "publish-atomically", "publisher-receipt", "show-review-path"],
+      "success_measure_keys": ["receipt-complete", "delivery-discoverable", "no-unrequested-format"]
+    },
+    {
+      "task_id": "FT-010",
+      "stratum": "web-ui",
+      "objective": "在内容优先页面中完成一条候选判断，无需依赖内部 ADF 编号理解正文。",
+      "privacy": "public-anonymous",
+      "host_lane": "codex-required",
+      "fixture_kind": "anonymous-offline-review-ui-single",
+      "scale_floor": {"candidates": 4, "anchors": 8},
+      "required_operations": ["single-verdict"],
+      "success_measure_keys": ["visible-content-first", "local-state-persisted", "one-step-verdict"]
+    },
+    {
+      "task_id": "FT-011",
+      "stratum": "web-ui",
+      "objective": "在同类候选组中执行有约束的批量判断，并允许剧情冲突成员退出批量结论。",
+      "privacy": "public-anonymous",
+      "host_lane": "codex-required",
+      "fixture_kind": "anonymous-offline-review-ui-batch",
+      "scale_floor": {"candidates": 12, "anchors": 40},
+      "required_operations": ["batch-verdict"],
+      "success_measure_keys": ["batch-coverage", "conflict-escape", "no-hidden-mutation"]
+    },
+    {
+      "task_id": "FT-012",
+      "stratum": "web-ui",
+      "objective": "为 mixed 内容写备注，刷新后恢复状态，再请求所选导出格式并获得明确回执。",
+      "privacy": "public-anonymous",
+      "host_lane": "codex-required",
+      "fixture_kind": "anonymous-offline-review-ui-resume-export",
+      "scale_floor": {"candidates": 6, "anchors": 12},
+      "required_operations": ["mixed-note", "refresh-restore", "export-request"],
+      "success_measure_keys": ["note-retained", "refresh-state-equal", "requested-format-only"]
+    },
+    {
+      "task_id": "FT-013",
+      "stratum": "mixed-segment",
+      "objective": "在 OpenCode 可用时独立复测 mixed segment 的保留、删除与接缝判断。",
+      "privacy": "public-anonymous",
+      "host_lane": "opencode-conditional",
+      "fixture_kind": "anonymous-inline-mixed-segments-host-replication",
+      "scale_floor": {"candidates": 5, "anchors": 10},
+      "required_operations": ["select-edit-plan", "retain-story-segment", "publisher-receipt"],
+      "success_measure_keys": ["mixed-delete-precision", "story-prefix-preserved", "host-breakdown"]
+    },
+    {
+      "task_id": "FT-014",
+      "stratum": "large-review",
+      "objective": "在 OpenCode 可用时独立完成 150 候选和 700 锚点以上的分页、批量与恢复演练。",
+      "privacy": "public-anonymous",
+      "host_lane": "opencode-conditional",
+      "fixture_kind": "seeded-anonymous-large-book-host-replication",
+      "scale_floor": {"candidates": 150, "anchors": 700},
+      "required_operations": ["paged-review", "group-verdict", "late-occurrence-conflict", "resume"],
+      "success_measure_keys": ["candidate-review-coverage", "late-conflict-preserved", "host-breakdown"]
+    },
+    {
+      "task_id": "FT-015",
+      "stratum": "publisher-terminal",
+      "objective": "在用户授权的本地私有节选上复核完成后展示与格式选择流程，只发布匿名自证聚合。",
+      "privacy": "private-local-aggregate-only",
+      "host_lane": "opencode-conditional",
+      "fixture_kind": "authorized-private-local-excerpt",
+      "scale_floor": {"candidates": 1, "anchors": 1},
+      "required_operations": ["publish-atomically", "publisher-receipt", "default-source-format"],
+      "success_measure_keys": ["private-aggregate-only", "receipt-complete", "host-breakdown"]
+    }
+  ]
+}

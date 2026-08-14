@@ -1,0 +1,19 @@
+{
+  "schema_version": 1,
+  "scan_config": {
+    "max_anchors": 3
+  },
+  "scan_id": "d9ba1f16e54f5d8fc8b5dfb26038a9ba8830d881b14b9944fd58cfaab9e9efd0",
+  "candidate_set_sha256": "42d78e59470419dac77012b69a68f1639c4eb9baf02caf99009f2ae9779ea8ca",
+  "page_sha256": "8d00cd1148570007288af969f4b7eb63f40e7cde702a9309d63bd18f0157cb59",
+  "candidate_id": "AD-0001",
+  "candidate_fingerprint": "5e8cf95b75cd3f82877dc3e0e151ed3ca53e2bc09849130ac0edd3ef1fa956b2",
+  "occurrence_count": 7,
+  "anchors_truncated": true,
+  "saved_anchor_ids": [
+    "AN-4dbd4947cd027d2c4e4ee64261d615fdadc40340148cb442521959f789239e0c",
+    "AN-b896d2e27cd99fa74451ce89147e286729c74537720054ca085d3ac6d921f0a0",
+    "AN-68f9d42178b4dffe298072c474685c94e446841fc385e65d1d3f0572aca4ea3b"
+  ],
+  "required_action": "stop-before-review-and-rescan"
+}

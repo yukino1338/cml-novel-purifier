@@ -1,0 +1,19 @@
+# Local source material and generated workspaces can be large and may be copyrighted.
+1小说/
+*.cleanwork/
+.experiment-work/
+.local-design/
+benchmarks/
+output/
+
+# Python and editor artifacts
+__pycache__/
+*.py[cod]
+*.pstats
+.coverage
+coverage*.json
+.mypy_cache/
+.ruff_cache/
+.pytest_cache/
+.venv/
+.vscode/

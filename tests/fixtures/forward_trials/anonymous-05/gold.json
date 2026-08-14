@@ -1,0 +1,15 @@
+{
+  "schema_version": 1,
+  "expected_outcome": "deletion-threshold-stopped",
+  "expected_verdicts": {
+    "AD-0001": "delete"
+  },
+  "eligible_delete_anchor_ids": [
+    "AN-a3a01b411aa77010a0787c2e5b462794cc0be6100b4630e40f746dbd4042fcf5"
+  ],
+  "required_stop_events": [
+    "deletion-ratio-above-eight-percent"
+  ],
+  "expected_verify": "blocked",
+  "expected_export": "not-run"
+}

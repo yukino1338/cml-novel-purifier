@@ -1,0 +1,13 @@
+{
+  "schema_version": 1,
+  "expected_outcome": "uncertain-stopped",
+  "expected_verdicts": {
+    "AD-0001": "uncertain"
+  },
+  "eligible_delete_anchor_ids": [],
+  "required_stop_events": [
+    "uncertain-formal-decision"
+  ],
+  "expected_verify": "not-run",
+  "expected_export": "not-run"
+}

@@ -1,0 +1,8 @@
+{
+  "schema": "cml.review-projection-benchmark.v1",
+  "candidate_count": 150,
+  "occurrence_count": 7000,
+  "synthetic_original_chars": 700,
+  "maximum_projection_to_repeated_payload_ratio": 0.6,
+  "baseline_definition": "compact UTF-8 JSON bytes of complete scanner candidates plus rule drafts, including the legacy repeated anchor payload"
+}

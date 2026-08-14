@@ -1,0 +1,19 @@
+{
+  "layout": {
+    "enabled": false,
+    "indent": "two_fullwidth_spaces",
+    "collapse_blank_lines": true,
+    "max_blank_lines": 1,
+    "punctuation_mode": "none",
+    "trim_trailing_space": true,
+    "normalize_ascii_space": false
+  },
+  "conversion": {
+    "mode": "none"
+  },
+  "export": {
+    "title": "",
+    "author": "",
+    "language": "zh-CN"
+  }
+}

@@ -1,0 +1,15 @@
+* text=auto eol=lf
+
+*.py text eol=lf
+*.md text eol=lf
+*.json text eol=lf
+*.jsonl text eol=lf
+*.yml text eol=lf
+*.yaml text eol=lf
+*.txt text eol=lf
+*.webp binary
+
+# These fixtures deliberately preserve legacy source bytes, including CRLF.
+# Treating them as text would silently alter the input identity on checkout.
+tests/fixtures/encodings/big5.txt binary
+tests/fixtures/encodings/gb18030.txt binary

@@ -1,0 +1,10 @@
+匿名排版样本
+
+第一章
+数值为 3.14，版本为 v1.2.3，时间是 08:30。
+邮箱是 notice@example.com。
+地址是 https://reader.example.com/path?q=1&part=2。
+相对路径是 folder\sample-a.txt，另一种写法是 folder/sample-a.txt。
+中文句子,可能带有半角标点?但保护字段不能改变.
+作者的话：这一行只用于布局策略测试。
+

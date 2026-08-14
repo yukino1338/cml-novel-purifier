@@ -1,0 +1,13 @@
+{
+  "schema_version": 1,
+  "expected_outcome": "passed-exported",
+  "expected_verdicts": {
+    "AD-0001": "delete"
+  },
+  "eligible_delete_anchor_ids": [
+    "AN-375653192585a686fd74c978db7ec4b58c5013848dcbb244f18142ee238495a2"
+  ],
+  "required_stop_events": [],
+  "expected_verify": "passed",
+  "expected_export": "passed"
+}

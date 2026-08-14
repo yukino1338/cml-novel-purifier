@@ -1,0 +1,113 @@
+匿名合成文本
+用途：广告正负例金标。
+
+第1章
+站外更新提示 01：请访问 https://reader.example.com/update/01 获取后续内容。
+正文负例 01：人物甲观察装置运转并完成精神扫描，随后把数据记在纸页上。
+站外更新提示 05：请访问 https://reader.example.com/update/05 获取后续内容。
+正文负例 05：人物甲整理衣袖并校对手写清单，没有处理外部文本。
+站外下载提示 03：请联系 notice03@example.com 获取文件。
+正文负例 03：人物甲说这张网站草图出自匿名作者，随后合上纸页。
+站外交流提示 01：请加入QQ群：TEST0001 获取更新通知。
+正文负例 01：终端正在下载场景数据，人物甲等待本地进度结束。
+站外交流提示 05：请加入QQ群：TEST0005 获取更新通知。
+正文负例 05：本地更新完成后，人物甲关闭没有联网的测试设备。
+TXT下载地址 03：download.example.net/file/03，仅供站外获取文件。
+正文负例 03：人物甲扫描桌面的纸页，再整理自己的观察笔记。
+来源水印 01：本书由匿名整理组校对，仅供学习交流；请访问 reader.example.com/source/01。
+正文负例 01：人物甲把“https://reader.example.com/clue/01”写进调查记录，明确说明它只是场景线索。
+来源水印 05：本书由匿名整理组校对，仅供学习交流；请访问 reader.example.com/source/05。
+正文负例 05：人物甲把“https://reader.example.com/clue/05”写进调查记录，明确说明它只是场景线索。
+阅读站提示 03：更新最快、无弹窗；reader.example点com/read/03。
+正文负例 03：纸页上的 clue03@example.com 是剧情中的旧邮箱，人物甲没有发出联系请求。
+作者的话：站外更新 01 请访问 https://reader.example.com/note/01。
+正文负例 01：面板显示“QQ群：LOG0001”是旧日志里的字符串，并非邀请。
+作者的话：站外更新 05 请访问 https://reader.example.com/note/05。
+正文负例 05：面板显示“QQ群：LOG0005”是旧日志里的字符串，并非邀请。
+相邻站外提示 03：请访问以下地址
+reader.example点com/multi/03
+正文负例 03：作者的话只解释本章结构，没有收藏、推荐、打赏或站外访问请求。
+
+第2章
+站外更新提示 02：请访问 https://reader.example.com/update/02 获取后续内容。
+正文负例 02：人物甲让齿轮回转自己原来的方向，然后整理散落零件。
+站外更新提示 06：请访问 https://reader.example.com/update/06 获取后续内容。
+正文负例 06：设备完成内部扫描，人物甲把结果录入值班表。
+站外下载提示 04：请联系 notice04@example.com 获取文件。
+正文负例 04：展板介绍作者与网站历史，但现场没有任何访问地址。
+站外交流提示 02：请加入QQ群：TEST0002 获取更新通知。
+正文负例 02：设备显示下载完成，随后自动更新室内温度记录。
+站外交流提示 06：请加入QQ群：TEST0006 获取更新通知。
+正文负例 06：人物甲查看下载速度，只为判断设备是否发生故障。
+TXT下载地址 04：download.example.net/file/04，仅供站外获取文件。
+正文负例 04：校对员检查本地表格，录入员同步修正两个数字。
+来源水印 02：本书由匿名整理组校对，仅供学习交流；请访问 reader.example.com/source/02。
+正文负例 02：人物甲把“https://reader.example.com/clue/02”写进调查记录，明确说明它只是场景线索。
+来源水印 06：本书由匿名整理组校对，仅供学习交流；请访问 reader.example.com/source/06。
+正文负例 06：人物甲把“https://reader.example.com/clue/06”写进调查记录，明确说明它只是场景线索。
+阅读站提示 04：更新最快、无弹窗；reader.example点com/read/04。
+正文负例 04：纸页上的 clue04@example.com 是剧情中的旧邮箱，人物甲没有发出联系请求。
+作者的话：站外更新 02 请访问 https://reader.example.com/note/02。
+正文负例 02：面板显示“QQ群：LOG0002”是旧日志里的字符串，并非邀请。
+作者的话：站外更新 06 请访问 https://reader.example.com/note/06。
+正文负例 06：面板显示“QQ群：LOG0006”是旧日志里的字符串，并非邀请。
+相邻站外提示 04：请访问以下地址
+reader.example点com/multi/04
+正文负例 04：告示写着“请访问 https://reader.example.com/evidence/04”，人物甲随即将它封存为场景证物。
+
+第3章
+站外更新提示 03：请访问 https://reader.example.com/update/03 获取后续内容。
+正文负例 03：人物甲抬手打断同伴的话，转身检查扫描仪的刻度。
+站外下载提示 01：请联系 notice01@example.com 获取文件。
+正文负例 01：人物甲讨论匿名作者的排版习惯，并画出网站页面草图。
+站外下载提示 05：请联系 notice05@example.com 获取文件。
+正文负例 05：人物甲核对作者字段和网站栏目，只是在整理本地档案。
+站外交流提示 03：请加入QQ群：TEST0003 获取更新通知。
+正文负例 03：人物甲暂停模型下载，把离线终端放回工具箱。
+TXT下载地址 01：download.example.net/file/01，仅供站外获取文件。
+正文负例 01：工坊每天更新值班记录，人物甲负责整理和校对纸页。
+TXT下载地址 05：download.example.net/file/05，仅供站外获取文件。
+正文负例 05：人物甲转身整理工具，并把手写记录放进抽屉。
+来源水印 03：本书由匿名整理组校对，仅供学习交流；请访问 reader.example.com/source/03。
+正文负例 03：人物甲把“https://reader.example.com/clue/03”写进调查记录，明确说明它只是场景线索。
+阅读站提示 01：更新最快、无弹窗；reader.example点com/read/01。
+正文负例 01：纸页上的 clue01@example.com 是剧情中的旧邮箱，人物甲没有发出联系请求。
+阅读站提示 05：更新最快、无弹窗；reader.example点com/read/05。
+正文负例 05：纸页上的 clue05@example.com 是剧情中的旧邮箱，人物甲没有发出联系请求。
+作者的话：站外更新 03 请访问 https://reader.example.com/note/03。
+正文负例 03：面板显示“QQ群：LOG0003”是旧日志里的字符串，并非邀请。
+相邻站外提示 01：请访问以下地址
+reader.example点com/multi/01
+正文负例 01：作者的话只解释本章结构，没有收藏、推荐、打赏或站外访问请求。
+相邻站外提示 05：请访问以下地址
+reader.example点com/multi/05
+正文负例 05：告示写着“请访问 https://reader.example.com/evidence/05”，人物甲随即将它封存为场景证物。
+
+第4章
+站外更新提示 04：请访问 https://reader.example.com/update/04 获取后续内容。
+正文负例 04：圆盘运转自如，人物甲只记录机械结构的变化。
+站外下载提示 02：请联系 notice02@example.com 获取文件。
+正文负例 02：课堂分析网站设计，讲义同时解释作者署名格式。
+站外下载提示 06：请联系 notice06@example.com 获取文件。
+正文负例 06：对话提到作者、读者和网站三个词，却没有推广含义。
+站外交流提示 04：请加入QQ群：TEST0004 获取更新通知。
+正文负例 04：面板上的下载条属于机器状态，不是文件获取邀请。
+TXT下载地址 02：download.example.net/file/02，仅供站外获取文件。
+正文负例 02：档案员录入旧清单，另一人手打缺失的编号。
+TXT下载地址 06：download.example.net/file/06，仅供站外获取文件。
+正文负例 06：扫描设备停止后，人物甲完成整理并更新值班表。
+来源水印 04：本书由匿名整理组校对，仅供学习交流；请访问 reader.example.com/source/04。
+正文负例 04：人物甲把“https://reader.example.com/clue/04”写进调查记录，明确说明它只是场景线索。
+阅读站提示 02：更新最快、无弹窗；reader.example点com/read/02。
+正文负例 02：纸页上的 clue02@example.com 是剧情中的旧邮箱，人物甲没有发出联系请求。
+阅读站提示 06：更新最快、无弹窗；reader.example点com/read/06。
+正文负例 06：纸页上的 clue06@example.com 是剧情中的旧邮箱，人物甲没有发出联系请求。
+作者的话：站外更新 04 请访问 https://reader.example.com/note/04。
+正文负例 04：面板显示“QQ群：LOG0004”是旧日志里的字符串，并非邀请。
+相邻站外提示 02：请访问以下地址
+reader.example点com/multi/02
+正文负例 02：作者的话只解释本章结构，没有收藏、推荐、打赏或站外访问请求。
+相邻站外提示 06：请访问以下地址
+reader.example点com/multi/06
+正文负例 06：告示写着“请访问 https://reader.example.com/evidence/06”，人物甲随即将它封存为场景证物。
+

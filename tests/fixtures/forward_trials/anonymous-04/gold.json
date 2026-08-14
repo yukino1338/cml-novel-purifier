@@ -1,0 +1,21 @@
+{
+  "schema_version": 1,
+  "expected_outcome": "truncation-rescanned-passed-exported",
+  "expected_verdicts": {
+    "AD-0001": "delete"
+  },
+  "eligible_delete_anchor_ids": [
+    "AN-7b06714b57442bc66addc6ed300f564178885855586c57ee5e6b3ec2b52b41c7",
+    "AN-740833386ff31db62b0064f1b8e90df74808f3636ab543ad37a2521febb9c236",
+    "AN-bdcab698ca0bba5efc02652328d89fc69a4de0c20a37326574498f5db423e7a5",
+    "AN-9ab9c92496ff9f7e0094144628f646bfae84b473459d43718950f1517bd397f3",
+    "AN-7f8828a331e969c16fdb034104622a466626a9568617487c7f5c92148ff0ac3a",
+    "AN-4df7102cfcd826e32ab3d7d9a6b08c50bf9b0eb8b5e1a00cbe0f1db0216b65d6",
+    "AN-b18ee8b5c0c593dd1c30ab9bc81a0db36f6179878d56c8ef019e9410beb130b4"
+  ],
+  "required_stop_events": [
+    "truncated-anchors-before-rescan"
+  ],
+  "expected_verify": "passed",
+  "expected_export": "passed"
+}

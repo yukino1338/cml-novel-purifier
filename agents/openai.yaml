@@ -1,0 +1,4 @@
+interface:
+  display_name: "CML 中文 TXT 小说净化"
+  short_description: "证据约束的中文 TXT 小说广告清理、最终验证与安全导出"
+  default_prompt: "使用 $cml-novel-purifier 处理这部中文 TXT 小说：先说明原文不修改、默认 TXT/preserve 和预计结果根；若仅检查标题或屏蔽词就只报告，否则保留原文快照并完整判断全部广告候选。任何终态都调用 publisher，主动返回状态、复核页、主阅读文件（若有）、结果目录、实际格式和 source/v0 一致性；只有最终验证通过才生成阅读文件。"

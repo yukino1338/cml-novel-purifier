@@ -1,0 +1,1 @@
+{"scan_id":"f5b458069ece1a2d0c3b44d2272ebc3ae32e758c01ce00b2707aec5f612f5333","candidate_id":"AD-0001","candidate_fingerprint":"ae0172a0cfcbeb414a04f26bb1d6fabd54ae428bb749bdaab6c2a469c985c4ce","verdict":"uncertain","confidence":0.99,"reason":"同一完整锚点内前半是外部站点推广，后半是与上下文连续且后文依赖的剧情句；整块删除会一并删去黎青听见失踪妹妹咳嗽的正文，而当前协议不支持安全的行内子串删除。","blocking_reasons":["完整锚点混合广告与剧情正文","当前协议不支持仅删除广告子串的行内切分"]}

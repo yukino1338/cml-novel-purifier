@@ -1,0 +1,32 @@
+{
+  "schema": "cml.forward-inference-evidence.v1",
+  "study_id": "cml-forward-evidence-v1",
+  "state": "pending",
+  "evidence_class": "fresh-agent-inference",
+  "publication_claim": "none-pending-fresh-agent-execution",
+  "bindings": null,
+  "host_coverage": {
+    "required": ["codex"],
+    "conditional": ["opencode"],
+    "executed": [],
+    "conditional_unavailable_reason": null
+  },
+  "task_slots": [
+    {"task_id":"FT-001","status":"pending","host":null,"agent_context_sha256":null,"artifact_manifest_sha256":null,"counts_sha256":null,"fixture_sha256":null,"gold_sha256":null,"started_at":null,"completed_at":null,"terminal_receipt_sha256":null,"outcome":null,"failure_attribution":null,"counts":null},
+    {"task_id":"FT-002","status":"pending","host":null,"agent_context_sha256":null,"artifact_manifest_sha256":null,"counts_sha256":null,"fixture_sha256":null,"gold_sha256":null,"started_at":null,"completed_at":null,"terminal_receipt_sha256":null,"outcome":null,"failure_attribution":null,"counts":null},
+    {"task_id":"FT-003","status":"pending","host":null,"agent_context_sha256":null,"artifact_manifest_sha256":null,"counts_sha256":null,"fixture_sha256":null,"gold_sha256":null,"started_at":null,"completed_at":null,"terminal_receipt_sha256":null,"outcome":null,"failure_attribution":null,"counts":null},
+    {"task_id":"FT-004","status":"pending","host":null,"agent_context_sha256":null,"artifact_manifest_sha256":null,"counts_sha256":null,"fixture_sha256":null,"gold_sha256":null,"started_at":null,"completed_at":null,"terminal_receipt_sha256":null,"outcome":null,"failure_attribution":null,"counts":null},
+    {"task_id":"FT-005","status":"pending","host":null,"agent_context_sha256":null,"artifact_manifest_sha256":null,"counts_sha256":null,"fixture_sha256":null,"gold_sha256":null,"started_at":null,"completed_at":null,"terminal_receipt_sha256":null,"outcome":null,"failure_attribution":null,"counts":null},
+    {"task_id":"FT-006","status":"pending","host":null,"agent_context_sha256":null,"artifact_manifest_sha256":null,"counts_sha256":null,"fixture_sha256":null,"gold_sha256":null,"started_at":null,"completed_at":null,"terminal_receipt_sha256":null,"outcome":null,"failure_attribution":null,"counts":null},
+    {"task_id":"FT-007","status":"pending","host":null,"agent_context_sha256":null,"artifact_manifest_sha256":null,"counts_sha256":null,"fixture_sha256":null,"gold_sha256":null,"started_at":null,"completed_at":null,"terminal_receipt_sha256":null,"outcome":null,"failure_attribution":null,"counts":null},
+    {"task_id":"FT-008","status":"pending","host":null,"agent_context_sha256":null,"artifact_manifest_sha256":null,"counts_sha256":null,"fixture_sha256":null,"gold_sha256":null,"started_at":null,"completed_at":null,"terminal_receipt_sha256":null,"outcome":null,"failure_attribution":null,"counts":null},
+    {"task_id":"FT-009","status":"pending","host":null,"agent_context_sha256":null,"artifact_manifest_sha256":null,"counts_sha256":null,"fixture_sha256":null,"gold_sha256":null,"started_at":null,"completed_at":null,"terminal_receipt_sha256":null,"outcome":null,"failure_attribution":null,"counts":null},
+    {"task_id":"FT-010","status":"pending","host":null,"agent_context_sha256":null,"artifact_manifest_sha256":null,"counts_sha256":null,"fixture_sha256":null,"gold_sha256":null,"started_at":null,"completed_at":null,"terminal_receipt_sha256":null,"outcome":null,"failure_attribution":null,"counts":null},
+    {"task_id":"FT-011","status":"pending","host":null,"agent_context_sha256":null,"artifact_manifest_sha256":null,"counts_sha256":null,"fixture_sha256":null,"gold_sha256":null,"started_at":null,"completed_at":null,"terminal_receipt_sha256":null,"outcome":null,"failure_attribution":null,"counts":null},
+    {"task_id":"FT-012","status":"pending","host":null,"agent_context_sha256":null,"artifact_manifest_sha256":null,"counts_sha256":null,"fixture_sha256":null,"gold_sha256":null,"started_at":null,"completed_at":null,"terminal_receipt_sha256":null,"outcome":null,"failure_attribution":null,"counts":null},
+    {"task_id":"FT-013","status":"pending","host":null,"agent_context_sha256":null,"artifact_manifest_sha256":null,"counts_sha256":null,"fixture_sha256":null,"gold_sha256":null,"started_at":null,"completed_at":null,"terminal_receipt_sha256":null,"outcome":null,"failure_attribution":null,"counts":null},
+    {"task_id":"FT-014","status":"pending","host":null,"agent_context_sha256":null,"artifact_manifest_sha256":null,"counts_sha256":null,"fixture_sha256":null,"gold_sha256":null,"started_at":null,"completed_at":null,"terminal_receipt_sha256":null,"outcome":null,"failure_attribution":null,"counts":null},
+    {"task_id":"FT-015","status":"pending","host":null,"agent_context_sha256":null,"artifact_manifest_sha256":null,"counts_sha256":null,"fixture_sha256":null,"gold_sha256":null,"started_at":null,"completed_at":null,"terminal_receipt_sha256":null,"outcome":null,"failure_attribution":null,"counts":null}
+  ],
+  "aggregate": null
+}

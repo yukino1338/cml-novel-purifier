@@ -1,0 +1,14 @@
+{
+  "title": "灰塔值班簿",
+  "author": "",
+  "genre": "原创悬疑短篇",
+  "narrative_style": "第三人称值班记录叙事",
+  "main_characters": ["简禾"],
+  "places": ["灰塔"],
+  "factions": [],
+  "terms": ["值班簿", "备用灯", "旧机械"],
+  "legitimate_structures": ["章节标题"],
+  "summary": "简禾调查灰塔窗扇、灯光与墙内机械的异常。",
+  "evidence": ["完全虚构的公开前向试用文本"],
+  "rename_verified": false
+}

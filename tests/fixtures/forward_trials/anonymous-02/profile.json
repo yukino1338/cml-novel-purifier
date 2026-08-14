@@ -1,0 +1,14 @@
+{
+  "title": "纸桥档案",
+  "author": "",
+  "genre": "原创悬疑短篇",
+  "narrative_style": "第三人称档案调查叙事",
+  "main_characters": ["林絮"],
+  "places": ["市立档案馆"],
+  "factions": [],
+  "terms": ["旧账簿", "馆藏编号", "封存表"],
+  "legitimate_structures": ["章节标题"],
+  "summary": "林絮追查旧账簿缺页并维护完整证据链。",
+  "evidence": ["完全虚构的公开前向试用文本"],
+  "rename_verified": false
+}

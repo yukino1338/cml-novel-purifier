@@ -1,0 +1,1 @@
+{"scan_id":"a625e78a6386d0ec3b32943beb19812605d16323aaf2e0a0c245b80e911fd6d1","candidate_id":"AD-0001","candidate_fingerprint":"a4c9760d53d0d2df40f46e936fe3e5bfbf26bb4b6b54cb818dec8436265d6bf7","verdict":"delete","confidence":0.99,"reason":"该候选独立成段，包含外部联络目的地以及加入群组、获取更新的明确推广意图；前后均为连续剧情，唯一一处出现不参与叙事。","action":"delete","risk":"low","splice_strategy":"remove_paragraph"}

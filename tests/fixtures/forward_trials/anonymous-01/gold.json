@@ -1,0 +1,17 @@
+{
+  "schema_version": 1,
+  "expected_outcome": "passed-exported",
+  "expected_verdicts": {
+    "AD-0001": "keep",
+    "AD-0002": "delete",
+    "AD-0003": "keep"
+  },
+  "eligible_delete_anchor_ids": [
+    "AN-f2210ff4f200bd8c2ff087431b713fa29ffe386fd9473ec83d210eb758392299",
+    "AN-d807bf70bd3644da6f77bda14d16090c1f443b8b6732079e015508afc5fe3cab",
+    "AN-a0a6c57404d43146589739f409b652e6e248b22133949095a6032e246a4c4fa9"
+  ],
+  "required_stop_events": [],
+  "expected_verify": "passed",
+  "expected_export": "passed"
+}
