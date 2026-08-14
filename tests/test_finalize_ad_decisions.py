@@ -262,6 +262,206 @@ class FinalizeAdDecisionsTests(unittest.TestCase):
                                 manifest=changed_manifest,
                             )
 
+    def test_compiler_rejects_invalid_contracts_before_forming_decisions(self) -> None:
+        item = candidate("AD-contract", "广告")
+        malformed_truncation = copy.deepcopy(item)
+        malformed_truncation["anchors_truncated"] = "false"
+        with mock.patch.object(scan_identity, "validate_anchor_ids"):
+            with self.assertRaisesRegex(ValueError, "anchors_truncated"):
+                finalize.validate_candidate_contract([malformed_truncation])
+
+        malformed_anchors = copy.deepcopy(item)
+        malformed_anchors["anchors"] = "not-a-list"
+        with mock.patch.object(scan_identity, "validate_anchor_ids"):
+            with self.assertRaisesRegex(ValueError, "anchors must be a list"):
+                finalize.validate_candidate_contract([malformed_anchors])
+
+        invalid_plan_id = review(item, "delete", action="delete", edit_plan_id="")
+        with self.assertRaisesRegex(ValueError, "edit_plan_id is invalid"):
+            finalize.validate_review(invalid_plan_id, item, SCAN_ID)
+
+        with self.assertRaisesRegex(ValueError, "formal provenance is missing"):
+            finalize.compile_formal_decisions(
+                [item],
+                [review(item, "keep")],
+                rule_drafts([item]),
+                scan_id=SCAN_ID,
+                provenance={},
+            )
+
+        def reject_delete(extra: dict[str, object], message: str) -> None:
+            candidate_item = candidate("AD-delete-" + str(len(extra)), "广告")
+            agent_review = review(candidate_item, "delete", action="delete", **extra)
+            with self.assertRaisesRegex(ValueError, message):
+                finalize.compile_formal_decisions(
+                    [candidate_item],
+                    [agent_review],
+                    rule_drafts([candidate_item]),
+                    scan_id=SCAN_ID,
+                )
+
+        reject_delete({"edit_plan_id": "EP-without-plan"}, "whole-block delete")
+        reject_delete({"splice_strategy": "exact_segment"}, "requires a current scanner edit plan")
+        guarded = candidate("AD-guarded", "广告")
+        guarded["mutation_guard"] = "segment_review_required"
+        scan_identity.attach_candidate_fingerprints([guarded])
+        scan_identity.attach_anchor_ids([guarded])
+        with self.assertRaisesRegex(ValueError, "mixed-content candidate"):
+            finalize.compile_formal_decisions(
+                [guarded],
+                [review(guarded, "delete", action="delete")],
+                rule_drafts([guarded]),
+                scan_id=SCAN_ID,
+            )
+
+    def test_draft_provenance_rejects_deep_report_and_stage_tampering(self) -> None:
+        with tempfile.TemporaryDirectory() as directory:
+            workspace, candidates, scan_report = prepared_workspace(Path(directory))
+            draft_path = workspace / "decisions/ads_decisions.draft.jsonl"
+            drafts = common.load_jsonl(draft_path)
+            manifest = common.load_manifest(workspace)
+            report_path = workspace / "report/ad_decision_draft_report.json"
+            report = json.loads(report_path.read_text(encoding="utf-8"))
+            original_read_text = Path.read_text
+
+            def reject(
+                changed_report: object,
+                message: str,
+                *,
+                changed_scan_report: dict | None = None,
+                changed_manifest: dict | None = None,
+            ) -> None:
+                def read_text(path: Path, *args, **kwargs) -> str:
+                    if path == report_path:
+                        return json.dumps(changed_report)
+                    return original_read_text(path, *args, **kwargs)
+
+                with mock.patch.object(Path, "read_text", new=read_text):
+                    with self.assertRaisesRegex(ValueError, message):
+                        finalize.validate_current_draft_provenance(
+                            workspace,
+                            draft_path,
+                            drafts,
+                            candidates,
+                            changed_scan_report or scan_report,
+                            manifest=changed_manifest or manifest,
+                        )
+
+            missing_profile = copy.deepcopy(report)
+            missing_profile.pop("profile")
+            reject(missing_profile, "profile path is missing")
+
+            stale_manifest_hash = {**report, "review_pages_manifest_sha256": "0" * 64}
+            reject(stale_manifest_hash, "review manifest hash is stale")
+
+            no_review_manifest = copy.deepcopy(report)
+            no_review_manifest.pop("review_pages_manifest")
+            reject(no_review_manifest, "artifacts are not stage-owned")
+
+            stale_count = {**report, "candidate_count": len(candidates) + 1}
+            reject(stale_count, "candidate_count is stale")
+
+            missing_scan_pack = {**scan_report, "scan_rule_pack_sha256": None}
+            reject(report, "scan rule pack identity is missing", changed_scan_report=missing_scan_pack)
+
+            stale_stage_counts = copy.deepcopy(manifest)
+            stale_stage_counts["stages"]["2_ads"]["draft_keep_count"] = -1
+            reject(report, "stage counts are stale", changed_manifest=stale_stage_counts)
+
+            def unreadable_report(path: Path, *args, **kwargs) -> str:
+                if path == report_path:
+                    raise OSError("denied")
+                return original_read_text(path, *args, **kwargs)
+
+            with mock.patch.object(Path, "read_text", new=unreadable_report):
+                with self.assertRaisesRegex(ValueError, "draft report cannot be read"):
+                    finalize.validate_current_draft_provenance(
+                        workspace,
+                        draft_path,
+                        drafts,
+                        candidates,
+                        scan_report,
+                        manifest=manifest,
+                    )
+
+            reject([], "report must be a JSON object")
+
+    def test_preserved_formal_report_rejects_missing_invalid_and_stale_reports(self) -> None:
+        with tempfile.TemporaryDirectory() as directory:
+            workspace = Path(directory)
+            output_path = workspace / "decisions/ads_decisions.jsonl"
+            report_path = workspace / "report/ad_decision_formal_report.json"
+            output_path.parent.mkdir(parents=True)
+            report_path.parent.mkdir(parents=True)
+            run_id = "a" * 32
+            output_sha256 = "b" * 64
+            reviews_sha256 = "c" * 64
+            draft_sha256 = "d" * 64
+            scan_id = "e" * 64
+            candidate_set_sha256 = "f" * 64
+            provenance = {key: key for key in finalize.FORMAL_IDENTITY_KEYS}
+
+            def arguments(manifest: dict) -> None:
+                finalize.load_preserved_formal_report(
+                    workspace,
+                    manifest,
+                    output_path,
+                    report_path,
+                    output_sha256=output_sha256,
+                    reviews_sha256=reviews_sha256,
+                    draft_sha256=draft_sha256,
+                    scan_id=scan_id,
+                    candidate_set_sha256=candidate_set_sha256,
+                    provenance=provenance,
+                )
+
+            with self.assertRaisesRegex(ValueError, "provenance is missing"):
+                arguments({})
+
+            def manifest_for(report_sha256: str) -> dict:
+                output_relative = output_path.relative_to(workspace).as_posix()
+                report_relative = report_path.relative_to(workspace).as_posix()
+                return {
+                    "stages": {
+                        "2_ads": {
+                            "status": "done",
+                            "formal_run_id": run_id,
+                            "formal_decisions": output_relative,
+                            "formal_report": report_relative,
+                            "formal_decisions_sha256": output_sha256,
+                            "formal_reviews_sha256": reviews_sha256,
+                            "formal_draft_sha256": draft_sha256,
+                            "formal_report_sha256": report_sha256,
+                            "scan_id": scan_id,
+                            "candidate_set_sha256": candidate_set_sha256,
+                        }
+                    },
+                    "artifacts": {
+                        output_relative: {"run_id": run_id, "sha256": output_sha256},
+                        report_relative: {"run_id": run_id, "sha256": report_sha256},
+                    },
+                }
+
+            missing_sha256 = "0" * 64
+            with self.assertRaisesRegex(ValueError, "report provenance is stale"):
+                arguments(manifest_for(missing_sha256))
+
+            report_path.write_text("{", encoding="utf-8")
+            with self.assertRaisesRegex(ValueError, "report cannot be read"):
+                arguments(manifest_for(common.sha256_file(report_path)))
+
+            report_path.write_text("[]", encoding="utf-8")
+            with self.assertRaisesRegex(ValueError, "report must be a JSON object"):
+                arguments(manifest_for(common.sha256_file(report_path)))
+
+            report_path.write_text("{}", encoding="utf-8")
+            stale_stage = manifest_for(common.sha256_file(report_path))
+            stale_stage["stages"]["2_ads"]["status"] = "pending"
+            with self.assertRaisesRegex(ValueError, "provenance is stale"):
+                arguments(stale_stage)
+            with self.assertRaisesRegex(ValueError, "provenance is stale"):
+                arguments(manifest_for(common.sha256_file(report_path)))
+
     def test_finalize_propagates_complete_draft_identity(self) -> None:
         with tempfile.TemporaryDirectory() as directory:
             workspace, candidates, scan_report = prepared_workspace(

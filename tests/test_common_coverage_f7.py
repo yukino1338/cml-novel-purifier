@@ -1551,6 +1551,131 @@ class CommonRecoveryCoverageF7Tests(unittest.TestCase):
                 mismatch[0]["status"] = "failed"
                 self.assertFalse(function({"run_id": run_id, key: mismatch}))
 
+    def test_low_level_path_and_recovery_failures_are_fail_closed(self) -> None:
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory)
+            source = root / "source.txt"
+            source.write_text("正文", encoding="utf-8")
+            with self.assertRaisesRegex(ValueError, "SHA-256"):
+                common.source_identity_id("invalid", source)
+
+            workspace = root / "workspace"
+            workspace.mkdir()
+            with mock.patch.object(common, "validate_workspace", side_effect=ValueError("bad")):
+                self.assertFalse(common._existing_workspace_matches_source(source, workspace))
+
+            left = root / "left.txt"
+            right = root / "right.txt"
+            left.write_text("left", encoding="utf-8")
+            right.write_text("right", encoding="utf-8")
+            with mock.patch.object(common.os.path, "samefile", side_effect=OSError("unsupported")):
+                self.assertFalse(common._same_file_or_path(left, right))
+            with mock.patch.object(common.os, "name", "posix"):
+                self.assertEqual(common._without_windows_extended_prefix("plain"), "plain")
+            with mock.patch.object(common.os, "name", "nt"):
+                self.assertEqual(
+                    common._without_windows_extended_prefix(r"\\?\UNC\server\share"),
+                    r"\\server\share",
+                )
+            with mock.patch.object(Path, "resolve", side_effect=OSError("denied")):
+                with self.assertRaisesRegex(common.WorkspacePathError, "cannot resolve"):
+                    common._resolve_path(root, "test path")
+
+            with mock.patch.object(common.os, "scandir", side_effect=OSError("denied")):
+                with self.assertRaisesRegex(common.WorkspacePathError, "cannot inspect workspace directory"):
+                    common._validate_workspace_tree(workspace)
+
+            entry_path = workspace / "unreadable.txt"
+            entry_path.write_text("x", encoding="utf-8")
+
+            class UnreadableEntry:
+                def __init__(self, path: Path) -> None:
+                    self.path = str(path)
+
+                @staticmethod
+                def stat(*_args, **_kwargs):
+                    raise OSError("denied")
+
+            with mock.patch.object(common.os, "scandir", return_value=[UnreadableEntry(entry_path)]):
+                with self.assertRaisesRegex(common.WorkspacePathError, "cannot inspect workspace path"):
+                    common._validate_workspace_tree(workspace)
+
+            transaction_root = root / ".runs" / ("a" * 32)
+            transaction_root.mkdir(parents=True)
+            with mock.patch.object(Path, "rmdir", side_effect=OSError("not empty")):
+                common._cleanup_transaction_root(transaction_root)
+
+            run_id = "b" * 32
+            updates = {"run_id": run_id, "updates": [{"stage": "review", "status": "done"}]}
+            with mock.patch.object(common, "load_manifest", side_effect=OSError("missing")):
+                self.assertFalse(common._transaction_manifest_is_committed(workspace, updates))
+            with mock.patch.object(common, "load_manifest", return_value=[]):
+                self.assertFalse(common._transaction_manifest_is_committed(workspace, updates))
+
+            commits = [{"workspace": str(workspace), "stage": "review", "status": "done"}]
+            group = {"run_id": run_id, "group_commits": commits}
+            delivery = {"run_id": run_id, "commits": commits}
+            for function, journal in (
+                (common._transaction_group_is_committed, group),
+                (common._delivery_manifest_committed, delivery),
+            ):
+                with mock.patch.object(common, "load_manifest", side_effect=OSError("missing")):
+                    self.assertFalse(function(journal))
+                with mock.patch.object(common, "load_manifest", return_value=[]):
+                    self.assertFalse(function(journal))
+
+            delivery_root = root / "delivery" / ".delivery-runs" / ("c" * 32)
+            delivery_root.mkdir(parents=True)
+            with mock.patch.object(Path, "rmdir", side_effect=OSError("not empty")):
+                common._cleanup_delivery_run(delivery_root)
+            for manifest in ({"stages": []}, {"stages": {"review": []}}):
+                with mock.patch.object(common, "load_manifest", return_value=manifest):
+                    self.assertFalse(common._delivery_manifest_committed(delivery))
+
+            snapshot_workspace = root / "snapshot"
+            snapshot_workspace.mkdir()
+            with self.assertRaisesRegex(common.WorkspaceIdentityError, "marker is invalid"):
+                common._validate_snapshot_init_marker(snapshot_workspace)
+            marker = snapshot_workspace / common._SNAPSHOT_INIT_MARKER
+            marker.touch()
+            with mock.patch.object(common.os, "open", side_effect=FileExistsError):
+                self.assertEqual(common._create_snapshot_init_marker(snapshot_workspace), marker)
+            invalid_temp = snapshot_workspace / ".manifest.json.abcdefgh.tmp"
+            invalid_temp.mkdir()
+            with self.assertRaisesRegex(common.WorkspaceIdentityError, "temporary file is invalid"):
+                common._remove_snapshot_atomic_temps(snapshot_workspace)
+
+            with mock.patch.object(common, "validate_workspace", return_value=snapshot_workspace):
+                with self.assertRaisesRegex(common.WorkspacePathError, "aliases a protected"):
+                    common.save_manifest(
+                        snapshot_workspace,
+                        {"source": {"path": str(snapshot_workspace / "manifest.json")}},
+                    )
+
+            identity_workspace = root / "identity"
+            identity_workspace.mkdir()
+            (identity_workspace / "manifest.json").mkdir()
+            with self.assertRaisesRegex(common.WorkspaceIdentityError, "manifest is not a file"):
+                common._validate_bound_snapshot_identity(identity_workspace)
+
+            _, complete_workspace = make_workspace(root, "complete")
+            with common.WorkspaceTransaction(complete_workspace) as transaction:
+                transaction.discard_unwritten_stage(
+                    complete_workspace / "report" / "never-created.json"
+                )
+
+            escaped_manifest = common.load_manifest(complete_workspace)
+            original_resolve = common._resolve_path
+
+            def redirect_artifact(path: Path, label: str) -> Path:
+                if label == "manifest artifact":
+                    return root
+                return original_resolve(path, label)
+
+            with mock.patch.object(common, "_resolve_path", side_effect=redirect_artifact):
+                with self.assertRaisesRegex(common.WorkspaceIdentityError, "artifact escapes"):
+                    common._validate_manifest_v2(complete_workspace, escaped_manifest)
+
 
 if __name__ == "__main__":
     unittest.main()

@@ -21,6 +21,18 @@ from tests.support_formal_ads import formalize_ads  # noqa: E402
 
 
 class ApplyDecisionsF5Tests(unittest.TestCase):
+    def test_apply_rejects_unknown_module_and_wrong_stage_before_workspace_reads(self) -> None:
+        workspace = Path("unused.cleanwork")
+        arguments = (
+            "versions/v1_preprocessed.txt",
+            "decisions/ads_decisions.jsonl",
+            "versions/v2_ads_removed.txt",
+        )
+        with self.assertRaisesRegex(ValueError, "unsupported apply module"):
+            apply_decisions._run_locked(workspace, "unknown", *arguments, "2_ads")
+        with self.assertRaisesRegex(ValueError, "apply stage must be 2_ads"):
+            apply_decisions._run_locked(workspace, "ads", *arguments, "wrong-stage")
+
     def test_report_only_scans_rebind_structure_after_ad_deletion(self) -> None:
         with tempfile.TemporaryDirectory() as directory:
             root = Path(directory)
