@@ -428,8 +428,9 @@
         note: previous?.note || String(suppliedNote).trim().slice(0, 500),
       };
       patchDecision(candidateId);
-      window.scrollTo(scrollLeft, scrollTop);
-      requestAnimationFrame(() => window.scrollTo(scrollLeft, scrollTop));
+      const restoreScroll = () => window.scrollTo(scrollLeft, scrollTop);
+      restoreScroll();
+      requestAnimationFrame(() => requestAnimationFrame(restoreScroll));
     };
 
     root.addEventListener("input", (event) => {

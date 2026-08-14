@@ -17,6 +17,7 @@ from common import (
     resolve_current_head,
     resolve_workspace_paths,
     sha256_file,
+    validate_workspace,
     workspace_transaction_lock,
     write_json,
     write_utf8,
@@ -800,6 +801,7 @@ def _run_locked(
     decisions_value: str,
     skip_residual_scan: bool,
 ) -> dict[str, Any]:
+    workspace = validate_workspace(workspace)
     manifest = load_manifest(workspace)
     stages = manifest.get("stages", {})
     apply_stage = stages.get("2_ads") if isinstance(stages, dict) else None

@@ -181,7 +181,10 @@ class ExperimentSandboxF1Tests(unittest.TestCase):
                 self.assertTrue(sandbox.exists())
             finally:
                 if link.exists() or link.is_symlink():
-                    os.rmdir(link)
+                    if link.is_symlink():
+                        link.unlink()
+                    else:
+                        os.rmdir(link)
 
     def test_filesystem_root_is_rejected_without_writes(self) -> None:
         root = Path(Path.cwd().anchor)

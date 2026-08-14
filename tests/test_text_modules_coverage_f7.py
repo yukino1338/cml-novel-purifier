@@ -367,7 +367,7 @@ class TitleAndBlockedCoverageF7Tests(unittest.TestCase):
         self.assertEqual(len(deduplicated), 1)
 
     def test_choose_input_and_cli_mains_cover_explicit_and_auto_paths(self) -> None:
-        workspace = Path("C:/book.cleanwork")
+        workspace = Path("book.cleanwork").resolve()
         self.assertEqual(scan_titles.choose_input(workspace, "versions/custom.txt"), "versions/custom.txt")
         self.assertEqual(scan_blocked.choose_input(workspace, "versions/custom.txt"), "versions/custom.txt")
         with mock.patch.object(scan_titles, "resolve_current_head", return_value=workspace / "versions/v1.txt"):

@@ -4,6 +4,7 @@ import hashlib
 import sys
 import unittest
 from pathlib import Path
+from unittest import mock
 
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -15,6 +16,50 @@ import ad_decision_policy  # noqa: E402
 
 
 class VerifyF5Tests(unittest.TestCase):
+    def test_verify_canonicalizes_workspace_before_current_head_relative_path(self) -> None:
+        class StopAfterPathResolution(Exception):
+            pass
+
+        alias_workspace = Path("workspace-alias")
+        canonical_workspace = Path("workspace-canonical")
+        current_head = canonical_workspace / "versions/v1_preprocessed.txt"
+
+        with (
+            mock.patch.object(
+                verify,
+                "validate_workspace",
+                return_value=canonical_workspace,
+                create=True,
+            ) as validate_workspace,
+            mock.patch.object(
+                verify,
+                "load_manifest",
+                return_value={"stages": {"2_ads": {"output": "versions/v1_preprocessed.txt"}}},
+            ),
+            mock.patch.object(verify, "resolve_current_head", return_value=current_head),
+            mock.patch.object(
+                verify,
+                "resolve_workspace_paths",
+                side_effect=StopAfterPathResolution,
+            ) as resolve_workspace_paths,
+            self.assertRaises(StopAfterPathResolution),
+        ):
+            verify._run_locked(
+                alias_workspace,
+                "ads",
+                "versions/v1_preprocessed.txt",
+                "auto",
+                "decisions/ads_decisions.jsonl",
+                True,
+            )
+
+        validate_workspace.assert_called_once_with(alias_workspace)
+        self.assertEqual(resolve_workspace_paths.call_args.args[0], canonical_workspace)
+        self.assertEqual(
+            resolve_workspace_paths.call_args.kwargs["reads"]["after"],
+            "versions/v1_preprocessed.txt",
+        )
+
     def test_strong_l2_near_repeat_is_a_residual_blocker(self) -> None:
         text = "\n".join(
             (
