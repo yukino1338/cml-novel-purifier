@@ -1676,6 +1676,32 @@ class CommonRecoveryCoverageF7Tests(unittest.TestCase):
                 with self.assertRaisesRegex(common.WorkspaceIdentityError, "artifact escapes"):
                     common._validate_manifest_v2(complete_workspace, escaped_manifest)
 
+    def test_snapshot_recovery_requires_a_durable_marker_and_valid_journal(self) -> None:
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory)
+            source = root / "source.txt"
+            source.write_text("正文", encoding="utf-8")
+
+            missing_marker = root / "missing-marker"
+            missing_marker.mkdir()
+            (missing_marker / common._SNAPSHOT_INIT_JOURNAL).write_text("{}", encoding="utf-8")
+            with self.assertRaisesRegex(common.WorkspaceIdentityError, "no durable marker"):
+                common._load_snapshot_init_journal(source, missing_marker)
+
+            unknown_entry = root / "unknown-entry"
+            unknown_entry.mkdir()
+            (unknown_entry / common._SNAPSHOT_INIT_MARKER).touch()
+            (unknown_entry / "unrelated.txt").write_text("x", encoding="utf-8")
+            with self.assertRaisesRegex(common.WorkspaceIdentityError, "unknown entry"):
+                common._load_snapshot_init_journal(source, unknown_entry)
+
+            invalid_journal = root / "invalid-journal"
+            invalid_journal.mkdir()
+            (invalid_journal / common._SNAPSHOT_INIT_MARKER).touch()
+            (invalid_journal / common._SNAPSHOT_INIT_JOURNAL).write_text("{", encoding="utf-8")
+            with self.assertRaisesRegex(common.WorkspaceIdentityError, "journal cannot be read"):
+                common._load_snapshot_init_journal(source, invalid_journal)
+
 
 if __name__ == "__main__":
     unittest.main()

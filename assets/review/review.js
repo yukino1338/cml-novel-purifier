@@ -451,6 +451,21 @@
       }
     });
 
+    root.addEventListener("keydown", (event) => {
+      const target = event.target;
+      if (
+        !(target instanceof HTMLInputElement)
+        || !target.matches("[data-review-choice]")
+        || (event.key !== " " && event.key !== "Spacebar")
+      ) return;
+      // Browser defaults can scroll the document after changing a focused radio.
+      // Apply the same native radio state explicitly so the review position is stable.
+      event.preventDefault();
+      if (target.disabled || target.checked) return;
+      target.checked = true;
+      target.dispatchEvent(new Event("change", {bubbles: true}));
+    });
+
     root.addEventListener("change", async (event) => {
       const target = event.target;
       if (!(target instanceof HTMLElement)) return;
