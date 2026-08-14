@@ -537,9 +537,9 @@
         renderWorkbench();
         const activeHeading = root.querySelector("[data-review-active-heading]");
         if (window.matchMedia("(max-width: 768px)").matches) {
+          activeHeading?.focus?.({preventScroll: true});
           requestAnimationFrame(() => {
             activeHeading?.scrollIntoView?.({block: "start", behavior: "auto"});
-            activeHeading?.focus?.({preventScroll: true});
           });
           return;
         }
