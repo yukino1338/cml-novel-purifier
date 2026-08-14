@@ -736,6 +736,9 @@ class ReviewBrowserF6Tests(unittest.TestCase):
                     "buffer": json.dumps(old_state).encode("utf-8"),
                 }
             )
+            page.wait_for_function(
+                "document.querySelector('[data-review-copy-status]').textContent.includes('已拒绝导入')"
+            )
             self.assertIn("已拒绝导入", page.locator("[data-review-copy-status]").inner_text())
             self.assertNotEqual(payload["review_state_id"], old_state["review_state_id"])
             self.assertEqual(errors, [])
