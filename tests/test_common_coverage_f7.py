@@ -1702,6 +1702,19 @@ class CommonRecoveryCoverageF7Tests(unittest.TestCase):
             with self.assertRaisesRegex(common.WorkspaceIdentityError, "journal cannot be read"):
                 common._load_snapshot_init_journal(source, invalid_journal)
 
+            journal_is_directory = root / "journal-is-directory"
+            journal_is_directory.mkdir()
+            (journal_is_directory / common._SNAPSHOT_INIT_MARKER).touch()
+            (journal_is_directory / common._SNAPSHOT_INIT_JOURNAL).mkdir()
+            with self.assertRaisesRegex(common.WorkspaceIdentityError, "journal is invalid"):
+                common._load_snapshot_init_journal(source, journal_is_directory)
+
+            missing_v0 = root / "missing-v0"
+            missing_v0.mkdir()
+            (missing_v0 / "manifest.json").write_text("{}", encoding="utf-8")
+            with self.assertRaisesRegex(common.WorkspaceIdentityError, "without its bound v0 snapshot"):
+                common._validate_bound_snapshot_identity(missing_v0)
+
 
 if __name__ == "__main__":
     unittest.main()
