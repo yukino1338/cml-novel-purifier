@@ -412,7 +412,7 @@
       const restoredScroll = state.filters.scroll_y;
       saveState({preserveScroll: restoreScroll});
       if (focusPager) resultsNode.focus({preventScroll: true});
-      if (restoreScroll) requestAnimationFrame(() => window.scrollTo({top: restoredScroll || 0, behavior: "auto"}));
+      if (restoreScroll) requestAnimationFrame(() => window.scrollTo({top: restoredScroll || 0, behavior: "instant"}));
     };
 
     const updateDecision = (candidateId, verdict, {note: suppliedNote = ""} = {}) => {
@@ -428,7 +428,7 @@
         note: previous?.note || String(suppliedNote).trim().slice(0, 500),
       };
       patchDecision(candidateId);
-      const restoreScroll = () => window.scrollTo(scrollLeft, scrollTop);
+      const restoreScroll = () => window.scrollTo({left: scrollLeft, top: scrollTop, behavior: "instant"});
       restoreScroll();
       requestAnimationFrame(() => requestAnimationFrame(restoreScroll));
     };

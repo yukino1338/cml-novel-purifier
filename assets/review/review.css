@@ -163,7 +163,7 @@ section.workspace > .workspace-hero { margin-bottom: 16px; padding-bottom: 14px;
 .state-inspection-only, .state-stopped { color: var(--brand); background: #edf3f5; }
 .review-heading { display: flex; align-items: end; justify-content: space-between; gap: 20px; margin-bottom: 10px; }
 .review-heading > p { max-width: 58ch; margin: 0; }
-.exception-review { margin-top: 0; padding: 0; border: 0; overflow-anchor: none; }
+.exception-review { margin-top: 0; padding: 0; border: 0; }
 .review-batchbar { display: flex; flex-wrap: wrap; align-items: center; gap: 8px; margin: 8px 0 12px; }
 .batch-note { display: grid; flex: 1 1 300px; gap: 4px; color: var(--muted); font-size: 12px; }
 .batch-note textarea { width: 100%; min-height: 44px; resize: vertical; color: var(--ink); background: #fff; border: 1px solid var(--line); border-radius: 6px; padding: 8px 9px; font: inherit; }
