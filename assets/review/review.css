@@ -1,7 +1,7 @@
 /* cml-review-template:__CML_REVIEW_TEMPLATE_VERSION__ */
 :root { color-scheme: light; --canvas: #f5f4f0; --surface: #fff; --ink: #182126; --muted: #66737b; --line: #dde1e0; --brand: #2d5d70; --review: #8a5b0d; --delete: #91362f; --safe: #36694e; --radius: 8px; }
 * { box-sizing: border-box; }
-html { scroll-behavior: smooth; }
+html { scroll-behavior: auto; }
 body { margin: 0; background: var(--canvas); color: var(--ink); font-family: "Microsoft YaHei UI", "PingFang SC", "Noto Sans CJK SC", sans-serif; font-size: 16px; line-height: 1.65; }
 :where(a, button, input, select, summary, [tabindex]):focus-visible { outline: 3px solid var(--brand); outline-offset: 3px; }
 .page-shell { width: min(1440px, calc(100% - 48px)); margin: 0 auto; padding: 22px 0 64px; }

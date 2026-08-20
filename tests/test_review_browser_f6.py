@@ -487,6 +487,7 @@ class ReviewBrowserF6Tests(unittest.TestCase):
             path=self.interactive_page_path,
         )
         try:
+            self.assertEqual(page.evaluate("getComputedStyle(document.documentElement).scrollBehavior"), "auto")
             module = page.locator("[data-review-module]")
             module.press("ArrowDown")
             self.assertEqual(module.input_value(), "ads")
